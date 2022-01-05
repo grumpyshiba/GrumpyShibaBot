@@ -1,3 +1,4 @@
+import express from 'express';
 import fetch from 'isomorphic-fetch';
 import TelegramBot from 'node-telegram-bot-api';
 
@@ -58,3 +59,13 @@ bot.onText(/🎁 Join Airdrop/, async (msg) => {
 bot.on('message', (msg) => {
   console.log(msg.chat.id);
 });
+
+// Start bot API
+const app = express()
+
+app.get('/', function (req, res) {
+  res.json({ status: 'ok' });
+})
+
+// Start server
+app.listen(process.env.PORT || 3000, () => console.log('Server is running...'));
