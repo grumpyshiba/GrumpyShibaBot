@@ -61,6 +61,7 @@ bot.on('message', (msg) => {
 });
 
 // Start bot API
+
 const app = express()
 
 app.get('/', function (req, res) {
@@ -68,4 +69,5 @@ app.get('/', function (req, res) {
 })
 
 // Start server
+
 app.listen(process.env.PORT || 3000, () => console.log('Server is running...'));
