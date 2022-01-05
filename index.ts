@@ -64,7 +64,7 @@ bot.on('message', (msg) => {
 
 const app = express()
 
-app.get('/', function (req, res) {
+app.get('/', function (_, res) {
   res.json({ status: 'ok' });
 });
 
