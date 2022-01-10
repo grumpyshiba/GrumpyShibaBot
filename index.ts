@@ -17,7 +17,12 @@ const handlePrice = (msg: TelegramBot.Message) => {
       const isUp = result.data[0].priceUSDChange24h > 0;
       data.push(`${isUp ? '📈' : '📉'} GRUMPYSHIB today is <b>${isUp ? 'up' : 'down'}</b> for ${(result.data[0].priceUSDChange24h * 100).toFixed(2)}%`);
     }
-    bot.sendMessage(msg.chat.id, data.join('\n'), { parse_mode : "HTML" });
+    bot.sendMessage(msg.chat.id, data.join('\n'), {
+      reply_markup: {
+        inline_keyboard: [ [ { text: 'Buy Now', url: 'https://www.flooz.trade/embedded/0xAe448cB5A3ec77BA4aDcc6C8f9621e5921DCd77a' } ] ]
+      },
+      parse_mode : "HTML"
+    });
   });
 }
 
