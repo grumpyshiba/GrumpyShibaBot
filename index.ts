@@ -18,7 +18,7 @@ const handlePrice = (msg: TelegramBot.Message) => {
     if (result.data[0].priceUSDChange24h !== 0) {
       const isUp = result.data[0].priceUSDChange24h > 0;
       data.push(`${isUp ? '📈' : '📉'} GRUMPYSHIB today is <b>${isUp ? 'up' : 'down'}</b> for ${(result.data[0].priceUSDChange24h * 100).toFixed(2)}%`);
-      data.push(`📊 Market cap is ${TOTAL_SUPPLY * result.data[0].priceUSD}`);
+      data.push(`📊 Market cap is $${TOTAL_SUPPLY * result.data[0].priceUSD.toFixed(2)}`);
     }
   
     bot.sendMessage(msg.chat.id, data.join('\n'), {
