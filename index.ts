@@ -2,6 +2,8 @@ import express from 'express';
 import fetch from 'isomorphic-fetch';
 import TelegramBot from 'node-telegram-bot-api';
 
+const TOTAL_SUPPLY = Math.pow(10, 12);
+
 const bot = new TelegramBot(process.env.TELEGRAM_TOKEN as string, {
   polling: true,
 });
@@ -16,7 +18,9 @@ const handlePrice = (msg: TelegramBot.Message) => {
     if (result.data[0].priceUSDChange24h !== 0) {
       const isUp = result.data[0].priceUSDChange24h > 0;
       data.push(`${isUp ? '📈' : '📉'} GRUMPYSHIB today is <b>${isUp ? 'up' : 'down'}</b> for ${(result.data[0].priceUSDChange24h * 100).toFixed(2)}%`);
+      data.push(`📊 Market cap is ${TOTAL_SUPPLY * result.data[0].priceUSDChange24h}`);
     }
+  
     bot.sendMessage(msg.chat.id, data.join('\n'), {
       reply_markup: {
         inline_keyboard: [ [ { text: 'Buy Now', url: 'https://www.flooz.trade/embedded/0xAe448cB5A3ec77BA4aDcc6C8f9621e5921DCd77a' } ] ]
