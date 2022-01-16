@@ -1,5 +1,4 @@
 import express from 'express';
-import FormData from 'form-data';
 import fetch from 'isomorphic-fetch';
 import TelegramBot from 'node-telegram-bot-api';
 
@@ -25,6 +24,7 @@ const handlePrice = (msg: TelegramBot.Message) => {
       fetch('https://jobapi.thebittimes.com/token/updatedata?time=' + new Date().getTime(), { method: 'post', body })
       .then((result) => result.json())
       .then((tokenInfo) => {
+        console.log(tokenInfo);
         data.push(`📊 Market cap is ${(TOTAL_SUPPLY * result.data[0].priceUSD).toFixed(2)} USD (${tokenInfo.holders} ${String(tokenInfo.holders).substring(-1) === '1' ? 'holder' : 'holders'})`);
       });
     }
