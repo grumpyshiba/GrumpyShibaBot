@@ -25,17 +25,16 @@ const handlePrice = (msg: TelegramBot.Message) => {
       fetch('https://jobapi.thebittimes.com/token/updatedata?time=' + new Date().getTime(), { method: 'post', body })
       .then((result) => result.json())
       .then((tokenInfo) => {
-        console.log(tokenInfo);
         data.push(`📊 Market cap is ${(TOTAL_SUPPLY * result.data[0].priceUSD).toFixed(2)} USD (${tokenInfo.holders} ${String(tokenInfo.holders).substring(-1) === '1' ? 'holder' : 'holders'})`);
+      
+        bot.sendMessage(msg.chat.id, data.join('\n'), {
+          reply_markup: {
+            inline_keyboard: [ [ { text: 'Buy Now', url: 'https://www.flooz.trade/embedded/0xAe448cB5A3ec77BA4aDcc6C8f9621e5921DCd77a' } ] ]
+          },
+          parse_mode : "HTML"
+        });
       });
     }
-  
-    bot.sendMessage(msg.chat.id, data.join('\n'), {
-      reply_markup: {
-        inline_keyboard: [ [ { text: 'Buy Now', url: 'https://www.flooz.trade/embedded/0xAe448cB5A3ec77BA4aDcc6C8f9621e5921DCd77a' } ] ]
-      },
-      parse_mode : "HTML"
-    });
   });
 }
 
