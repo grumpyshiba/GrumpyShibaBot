@@ -1,4 +1,5 @@
 import express from 'express';
+import FormData from 'form-data';
 import fetch from 'isomorphic-fetch';
 import TelegramBot from 'node-telegram-bot-api';
 
@@ -19,8 +20,8 @@ const handlePrice = (msg: TelegramBot.Message) => {
       const isUp = result.data[0].priceUSDChange24h > 0;
       data.push(`${isUp ? '📈' : '📉'} GRUMPYSHIB today is <b>${isUp ? 'up' : 'down'}</b> for ${(result.data[0].priceUSDChange24h * 100).toFixed(2)}%`);
 
-      const body = new FormData();
-      body.set('id', '41804');
+      const body: any = new FormData();
+      body.append('id', '41804');
       fetch('https://jobapi.thebittimes.com/token/updatedata?time=' + new Date().getTime(), { method: 'post', body })
       .then((result) => result.json())
       .then((tokenInfo) => {
