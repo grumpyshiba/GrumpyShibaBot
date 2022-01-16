@@ -1,4 +1,5 @@
 import express from 'express';
+import FormData from 'form-data';
 import fetch from 'isomorphic-fetch';
 import TelegramBot from 'node-telegram-bot-api';
 
