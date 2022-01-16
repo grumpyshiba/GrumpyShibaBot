@@ -9,32 +9,43 @@ const bot = new TelegramBot(process.env.TELEGRAM_TOKEN as string, {
   polling: true,
 });
 
+const getTokenInfo = () => {
+  return fetch('https://api.dex.guru/v2/tokens/', { method: 'post', body: '{"ids":["0xAe448cB5A3ec77BA4aDcc6C8f9621e5921DCd77a-bsc"]}' })
+    .then(respose => respose.json());
+};
+
+const getTokenData = () => {
+  const body: any = new FormData();
+  body.append('id', '41804');
+  return fetch('https://jobapi.thebittimes.com/token/updatedata?time=' + new Date().getTime(), { method: 'post', body })
+    .then((result) => result.json());
+};
+
 // Handlers
 
-const handlePrice = (msg: TelegramBot.Message) => {
-  fetch('https://api.dex.guru/v2/tokens/', { method: 'post', body: '{"ids":["0xAe448cB5A3ec77BA4aDcc6C8f9621e5921DCd77a-bsc"]}' })
-  .then(respose => respose.json())
-  .then(result => {
-    const data = [`💲 Current GRUMPYSHIB price is: <b>${Number(result.data[0].priceUSD).toFixed(18).replace(/\.?0+$/, '')} USD</b>`];
-    if (result.data[0].priceUSDChange24h !== 0) {
-      const isUp = result.data[0].priceUSDChange24h > 0;
-      data.push(`${isUp ? '📈' : '📉'} GRUMPYSHIB today is <b>${isUp ? 'up' : 'down'}</b> for ${(result.data[0].priceUSDChange24h * 100).toFixed(2)}%`);
+const handlePrice = async (msg: TelegramBot.Message) => {
+  const result = await getTokenInfo();
 
-      const body: any = new FormData();
-      body.append('id', '41804');
-      fetch('https://jobapi.thebittimes.com/token/updatedata?time=' + new Date().getTime(), { method: 'post', body })
-      .then((result) => result.json())
-      .then((tokenInfo) => {
-        data.push(`📊 Market cap is ${(TOTAL_SUPPLY * result.data[0].priceUSD).toFixed(2)} USD (${tokenInfo.holders} ${String(tokenInfo.holders).substring(-1) === '1' ? 'holder' : 'holders'})`);
-      
-        bot.sendMessage(msg.chat.id, data.join('\n'), {
-          reply_markup: {
-            inline_keyboard: [ [ { text: 'Buy Now', url: 'https://www.flooz.trade/embedded/0xAe448cB5A3ec77BA4aDcc6C8f9621e5921DCd77a' } ] ]
-          },
-          parse_mode : "HTML"
-        });
-      });
+  const data = [`💲 Current GRUMPYSHIB price is: <b>${Number(result.data[0].priceUSD).toFixed(18).replace(/\.?0+$/, '')} USD</b>`];
+  if (result.data[0].priceUSDChange24h !== 0) {
+    const isUp = result.data[0].priceUSDChange24h > 0;
+    data.push(`${isUp ? '📈' : '📉'} GRUMPYSHIB today is <b>${isUp ? 'up' : 'down'}</b> for ${(result.data[0].priceUSDChange24h * 100).toFixed(2)}%`);
+  }
+
+  try {
+    const tokenInfo = await getTokenData();
+    if (tokenInfo) {
+      data.push(`📊 Market cap is ${(TOTAL_SUPPLY * result.data[0].priceUSD).toFixed(2)} USD (${tokenInfo.holders} ${String(tokenInfo.holders).substring(-1) === '1' ? 'holder' : 'holders'})`);
     }
+  } catch(e) {
+    console.log('Unable to fetch token data', e);
+  }
+
+  bot.sendMessage(msg.chat.id, data.join('\n'), {
+    reply_markup: {
+      inline_keyboard: [ [ { text: 'Buy Now', url: 'https://www.flooz.trade/embedded/0xAe448cB5A3ec77BA4aDcc6C8f9621e5921DCd77a' } ] ]
+    },
+    parse_mode : "HTML"
   });
 }
 
