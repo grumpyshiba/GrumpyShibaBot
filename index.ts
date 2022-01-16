@@ -18,7 +18,11 @@ const handlePrice = (msg: TelegramBot.Message) => {
     if (result.data[0].priceUSDChange24h !== 0) {
       const isUp = result.data[0].priceUSDChange24h > 0;
       data.push(`${isUp ? '📈' : '📉'} GRUMPYSHIB today is <b>${isUp ? 'up' : 'down'}</b> for ${(result.data[0].priceUSDChange24h * 100).toFixed(2)}%`);
-      data.push(`📊 Market cap is ${(TOTAL_SUPPLY * result.data[0].priceUSD).toFixed(2)} USD`);
+      fetch('https://jobapi.thebittimes.com/token/updatedata?time=' + new Date().getTime(), { method: 'post', body: 'id=41804' })
+      .then((result) => result.json())
+      .then((tokenInfo) => {
+        data.push(`📊 Market cap is ${(TOTAL_SUPPLY * result.data[0].priceUSD).toFixed(2)} USD (${tokenInfo.holders} ${String(tokenInfo.holders).substring(-1) === '1' ? 'holder' : 'holders'})`);
+      });
     }
   
     bot.sendMessage(msg.chat.id, data.join('\n'), {
