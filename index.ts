@@ -44,8 +44,7 @@ const handlePrice = async (msg: TelegramBot.Message) => {
   bot.sendMessage(msg.chat.id, data.join('\n'), {
     reply_markup: {
       inline_keyboard: [
-        [ { text: 'View Chart', url: 'https://www.flooz.trade/embedded/0xAe448cB5A3ec77BA4aDcc6C8f9621e5921DCd77a' } ],
-        [ { text: 'Buy Now', url: 'https://www.flooz.trade/embedded/0xAe448cB5A3ec77BA4aDcc6C8f9621e5921DCd77a' } ]
+        [ { text: 'View Chart', url: 'https://www.flooz.trade/embedded/0xAe448cB5A3ec77BA4aDcc6C8f9621e5921DCd77a' }, { text: 'Buy Now', url: 'https://www.flooz.trade/embedded/0xAe448cB5A3ec77BA4aDcc6C8f9621e5921DCd77a' } ]
       ]
     },
     parse_mode : "HTML"
