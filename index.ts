@@ -101,6 +101,8 @@ const handlePrice = async (msg: TelegramBot.Message) => {
     console.log('Unable to fetch token data', e);
   }
 
+  data.push('🔥 Next Burn: <b>50B GRUMPYSHIB</b> (250 holders / 100k market cap)');
+
   bot.sendMessage(msg.chat.id, data.join('\n'), {
     reply_markup: {
       inline_keyboard: [
