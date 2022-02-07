@@ -138,7 +138,13 @@ bot.onText(/\/start/, privateOnly((msg: TelegramBot.Message) => {
 bot.onText(/📈 Get Token Price/, privateOnly(handlePrice));
 bot.onText(/☮️ Charity Wallet/, privateOnly(handleCharity));
 bot.onText(/🎁 Join Airdrop/, privateOnly(async (msg: TelegramBot.Message) => {
-  bot.sendMessage(msg.chat.id, 'Sorry, but currently there are no active airdrops. Stay tuned for updates!');
+  bot.sendMessage(msg.chat.id, 'Airdrop is currently open. In order to participate please follow the link',  {
+    reply_markup: {
+      inline_keyboard: [
+        [ { text: 'Go to Airdrop', url: 'https://givelab.com/grumpyshib/grumpy-shiba-grumpyshib-500m-token-airdrop' } ]]
+    },
+    parse_mode: 'HTML'
+  });
 }));
 
 bot.on('message', (msg) => {
